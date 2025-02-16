@@ -69,4 +69,4 @@
 
 - name: Install docker-compose
   include_tasks: install_docker_compose.yml
-  when: install_docker_compose
+  when: install_docker_compose_swarm

@@ -88,19 +88,19 @@ all:
           ansible_user: root
           ansible_become: yes
           ansible_become_user: root
-          hostname: sworm-node-master-1
+          hostname: swarm-node-master-1
         192.168.1.31:
           ansible_user: root
           ansible_become: yes
           ansible_become_user: root
-          hostname: sworm-node-worker-1
+          hostname: swarm-node-worker-1
         192.168.1.33:
           ansible_user: root
           ansible_become: yes
           ansible_become_user: root
-          hostname: sworm-node-worker-2
+          hostname: swarm-node-worker-2
         192.168.1.32:
           ansible_user: root
           ansible_become: yes
           ansible_become_user: root
-          hostname: sworm-node-worker-3
+          hostname: swarm-node-worker-3
