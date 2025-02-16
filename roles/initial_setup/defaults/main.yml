@@ -1,12 +1,12 @@
 ---
 # defaults file for initial_setup
-skip_playbook: true
+skip_playbook: false
 
 user_created: true
 
 edit_ssh_settings: true
 
-upgrade_system: true
+upgrade_system: false
 
 change_hostnames: true
 

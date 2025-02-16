@@ -1,6 +1,23 @@
 ---
-- name: Configure server
-  hosts: all
+- name: Run initial setup for new servers
+  hosts: new_servers
+  become: yes
+  roles:
+    - initial_setup
+
+- name: Wait for SSH to be available after initial setup
+  hosts: new_servers
+  gather_facts: no
+  tasks:
+    - name: Wait for SSH to be available
+      wait_for:
+        host: "{{ inventory_hostname }}"
+        port: 22
+        state: started
+        delay: 10
+
+- name: Run initial setup for all other servers
+  hosts: all:!new_servers
   become: yes
   roles:
     - initial_setup

@@ -1,0 +1,5 @@
+- name: Install gitlab
+  hosts: all:!new_servers
+  become: yes
+  roles:
+    - install_gitlab
