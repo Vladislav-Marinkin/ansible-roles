@@ -1,13 +1,30 @@
 ---
-- name: Run initial setup for new servers
+- name: Check if all servers are unreachable
   hosts: new_servers
+  ignore_unreachable: yes
+  tasks:
+    - name: Initialize unreachable_hosts list
+      set_fact:
+        unreachable_hosts: []
+
+    - name: Check if host is unreachable
+      set_fact:
+        unreachable_hosts: "{{ unreachable_hosts | default([]) + [inventory_hostname] }}"
+      when: ansible_facts | length == 0
+      loop: "{{ groups['new_servers'] }}"
+
+- name: Configure new servers
+  hosts: reachable_new_servers #new_servers
+  ignore_unreachable: yes
+  gather_facts: yes
   become: yes
   roles:
-    - initial_setup
+    - role: initial_setup
+      #when: not unreachable_hosts | length == ansible_play_hosts | length
 
 - name: Wait for SSH to be available after initial setup
   hosts: new_servers
-  gather_facts: no
+  ignore_unreachable: yes
   tasks:
     - name: Wait for SSH to be available
       wait_for:
@@ -16,7 +33,7 @@
         state: started
         delay: 10
 
-- name: Run initial setup for all other servers
+- name: Configure servers
   hosts: all:!new_servers
   become: yes
   roles:
@@ -27,3 +44,9 @@
   become: yes
   roles:
     - install_docker
+
+- name: Install gitlab
+  hosts: all:!new_servers
+  become: yes
+  roles:
+    - install_gitlab

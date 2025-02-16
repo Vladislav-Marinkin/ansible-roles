@@ -1,7 +1,7 @@
 ---
 # defaults file for install_docker
 
-skip_playbook: false
+skip_playbook: true
 
 install_docker: true
 

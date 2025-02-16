@@ -6,7 +6,7 @@ user_created: true
 
 edit_ssh_settings: true
 
-upgrade_system: false
+upgrade_system: true
 
 change_hostnames: true
 

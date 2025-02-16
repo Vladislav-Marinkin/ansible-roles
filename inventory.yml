@@ -8,6 +8,12 @@ all:
           ansible_become_user: root
           docker: true
           allow_ports: [443,80,8080,8081]
+        test-node:
+          ansible_user: ansible
+          ansible_become: yes
+          ansible_become_user: root
+          docker: true
+          allow_ports: [443,80,8080,8081]
 
     monitoring:
       hosts:
@@ -104,3 +110,8 @@ all:
           ansible_become: yes
           ansible_become_user: root
           hostname: swarm-node-worker-3
+        192.168.1.38:
+          ansible_user: root
+          ansible_become: yes
+          ansible_become_user: root
+          hostname: test-node
