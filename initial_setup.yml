@@ -3,24 +3,28 @@
   hosts: new_servers
   ignore_unreachable: yes
   tasks:
-    - name: Initialize unreachable_hosts list
+    - name: Create a list of reachable hosts
       set_fact:
-        unreachable_hosts: []
+        reachable_hosts: "{{ reachable_hosts | default([]) + [inventory_hostname] }}"
+      when: ansible_facts | length != 0
 
-    - name: Check if host is unreachable
+    - name: Gather all reachable_hosts from all hosts
       set_fact:
-        unreachable_hosts: "{{ unreachable_hosts | default([]) + [inventory_hostname] }}"
-      when: ansible_facts | length == 0
-      loop: "{{ groups['new_servers'] }}"
+        all_reachable_hosts: "{{ groups['all'] | map('extract', hostvars, 'reachable_hosts') | map('default', []) | list | flatten }}"
+
+    - name: Add a host to group
+      add_host:
+        name: "{{ item }}"
+        groups: reachable_hosts
+      loop: "{{ all_reachable_hosts }}"
 
 - name: Configure new servers
-  hosts: reachable_new_servers #new_servers
+  hosts: reachable_hosts
   ignore_unreachable: yes
   gather_facts: yes
   become: yes
   roles:
-    - role: initial_setup
-      #when: not unreachable_hosts | length == ansible_play_hosts | length
+    - initial_setup
 
 - name: Wait for SSH to be available after initial setup
   hosts: new_servers
@@ -45,8 +49,26 @@
   roles:
     - install_docker
 
+- name: Install kafka
+  hosts: web-servers
+  become: yes
+  roles:
+    - install_kafka
+
+- name: Install nginx
+  hosts: web-servers
+  become: yes
+  roles:
+    - install_nginx
+
 - name: Install gitlab
-  hosts: all:!new_servers
+  hosts: gitlab-servers
   become: yes
   roles:
     - install_gitlab
+
+- name: Install monitoring
+  hosts: all:!new_servers
+  become: yes
+  roles:
+    - install_monitoring

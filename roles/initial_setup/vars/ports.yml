@@ -45,7 +45,7 @@ port_type_map:
   # 🔹 DevOps и CI/CD
   8086: influxdb_port_t         # InfluxDB
   9090: prometheus_port_t       # Prometheus
-  9092: kafka_port_t            # Kafka
+  #9092: kafka_port_t            # Kafka
   3000: grafana_port_t          # Grafana
   5000: docker_registry_port_t  # Docker Registry
   8082: nexus_port_t            # Nexus Repository
@@ -58,7 +58,6 @@ port_type_map:
 
   # 🔹 Разное
   6667: irc_port_t              # IRC сервер
-  25565: minecraft_port_t       # Minecraft сервер
 
   # 🔹 Фallback (если порт не найден)
   default: unreserved_port_t

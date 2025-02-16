@@ -1,21 +1,15 @@
 all:
   children:
-    web-app:
+    web-servers:
       hosts:
-        web-app:
-          ansible_user: ansible
-          ansible_become: yes
-          ansible_become_user: root
-          docker: true
-          allow_ports: [443,80,8080,8081]
-        test-node:
+        nginx:
           ansible_user: ansible
           ansible_become: yes
           ansible_become_user: root
           docker: true
           allow_ports: [443,80,8080,8081]
 
-    monitoring:
+    monitoring-servers:
       hosts:
         monitoring:
           ansible_user: ansible
@@ -23,7 +17,7 @@ all:
           ansible_become_user: root
           allow_ports: []
 
-    gitlab-ci:
+    gitlab-servers:
       hosts:
         gitlab-ci:
           ansible_user: ansible
@@ -67,6 +61,24 @@ all:
           docker-sworm: true
           master: false
           allow_ports: []
+
+    kafka-servers:
+      hosts:
+        kafka-node-1:
+          ansible_user: ansible
+          ansible_become: yes
+          ansible_become_user: root
+          allow_ports: [9092,9093,9999]
+        kafka-node-2:
+          ansible_user: ansible
+          ansible_become: yes
+          ansible_become_user: root
+          allow_ports: [9092,9093,9999]
+        kafka-node-3:
+          ansible_user: ansible
+          ansible_become: yes
+          ansible_become_user: root
+          allow_ports: [9092,9093,9999]
           
     new_servers:
       hosts: 
@@ -74,7 +86,7 @@ all:
           ansible_user: root
           ansible_become: yes
           ansible_become_user: root
-          hostname: web-app
+          hostname: nginx
         192.168.1.29:
           ansible_user: root
           ansible_become: yes
@@ -115,3 +127,18 @@ all:
           ansible_become: yes
           ansible_become_user: root
           hostname: test-node
+        192.168.1.41:
+          ansible_user: root
+          ansible_become: yes
+          ansible_become_user: root
+          hostname: kafka-node-1
+        192.168.1.39:
+          ansible_user: root
+          ansible_become: yes
+          ansible_become_user: root
+          hostname: kafka-node-2
+        192.168.1.40:
+          ansible_user: root
+          ansible_become: yes
+          ansible_become_user: root
+          hostname: kafka-node-3

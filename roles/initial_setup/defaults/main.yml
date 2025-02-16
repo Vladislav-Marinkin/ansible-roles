@@ -1,6 +1,6 @@
 ---
 # defaults file for initial_setup
-skip_playbook: false
+skip_playbook: true
 
 user_created: true
 

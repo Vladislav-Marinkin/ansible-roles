@@ -11,9 +11,9 @@
 # ======================================
 - name: Collect remote host details
   ansible.builtin.setup:
-  delegate_to: "{{ item }}"  # Выполняем команду на удалённых хостах
-  delegate_facts: true  # Сохраняем собранные данные в hostvars
-  loop: "{{ groups['new_servers'] }}"  # Обрабатываем только хосты из группы "new_servers"
+  delegate_to: "{{ item }}"
+  delegate_facts: true
+  loop: "{{ groups['reachable_hosts'] }}"
 
 # ======================================
 # 📝 3️⃣ Обновление /etc/hosts на локальном хосте
@@ -21,9 +21,9 @@
 - name: Ensure correct IP and hostname in /etc/hosts to local host
   ansible.builtin.lineinfile:
     path: /etc/hosts
-    regexp: "^.*\\s+{{ hostvars[item]['hostname'] }}$"  # Поиск строки с hostname
-    line: "{{ hostvars[item]['ansible_default_ipv4']['address'] }} {{ hostvars[item]['hostname'] }}"  # Записываем IP и hostname
+    regexp: "^.*\\s+{{ hostvars[item]['hostname'] }}$"
+    line: "{{ hostvars[item]['ansible_default_ipv4']['address'] }} {{ hostvars[item]['hostname'] }}"
     state: present
-    backup: yes  # Создаём резервную копию /etc/hosts перед изменением
-  delegate_to: localhost  # Выполняем на локальном хосте
-  loop: "{{ groups['new_servers'] }}"  # Перебираем новые сервера
+    backup: yes
+  delegate_to: localhost
+  loop: "{{ groups['reachable_hosts'] }}"
