@@ -1,0 +1,12 @@
+---
+# handlers file for initial_setup
+- name: Restart SSH Service
+  systemd:
+    name: sshd
+    state: restarted
+
+- name: Reload Firewalld
+  command: firewall-cmd --reload
+
+- name: Reload UFW
+  command: ufw reload

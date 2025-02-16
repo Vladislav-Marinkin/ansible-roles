@@ -1,0 +1,92 @@
+---
+# ======================================
+# 🏗️ 1️⃣ Установка зависимостей
+# ======================================
+
+# 🔧 Устанавливаем необходимые пакеты для управления репозиториями и контейнерами (RedHat)
+- name: Install required dependencies for RedHat family
+  yum:
+    name:
+      - yum-utils
+      - device-mapper-persistent-data
+      - lvm2
+    state: present
+  when: ansible_os_family == "RedHat"
+
+# 🔧 Устанавливаем необходимые пакеты для управления репозиториями и контейнерами (Debian)
+- name: Install required dependencies for Debian family
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - software-properties-common
+    state: present
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+
+  # =================================================
+# 🔑 2️⃣ Добавление официального репозитория Docker
+# =================================================
+
+# 🐳 Добавляем Docker-репозиторий для RedHat/Oracle Linux
+- name: Add Docker repository for RedHat family
+  shell: |
+    dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  args:
+    creates: /etc/yum.repos.d/docker-ce.repo
+  when: ansible_os_family == "RedHat"
+
+# 📂 Создаем директорию для GPG-ключей (если она не существует)
+- name: Ensure /etc/apt/keyrings exists
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  when: ansible_os_family == "Debian"
+
+# 🔑 Скачиваем GPG-ключ Docker (для Debian/Ubuntu)
+- name: Download Docker GPG key
+  get_url:
+    url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+    dest: "/etc/apt/keyrings/docker.asc"
+    mode: '0644'
+  when: ansible_os_family == "Debian"
+
+# 🔓 Устанавливаем правильные права для GPG-ключа Docker
+- name: Set permissions for Docker GPG key
+  file:
+    path: "/etc/apt/keyrings/docker.asc"
+    mode: '0644'
+  when: ansible_os_family == "Debian"
+
+# 🔄 Получаем архитектуру системы (для формирования репозитория)
+- name: Get system architecture
+  command: dpkg --print-architecture
+  register: system_architecture
+  changed_when: false
+  when: ansible_os_family == "Debian"
+
+# 🔄 Получаем `VERSION_CODENAME` (например, focal, jammy) из `/etc/os-release`
+- name: Get OS version codename
+  command: bash -c '. /etc/os-release && echo "$VERSION_CODENAME"'
+  register: os_codename
+  changed_when: false
+  when: ansible_os_family == "Debian"
+
+# 🐳 Добавляем Docker-репозиторий в APT-источники
+- name: Add Docker repository
+  copy:
+    dest: "/etc/apt/sources.list.d/docker.list"
+    content: |
+      deb [arch={{ system_architecture.stdout }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ os_codename.stdout }} stable
+    mode: '0644'
+  when: ansible_os_family == "Debian"
+
+# 🔄 Обновляем APT-кэш после добавления репозитория
+- name: Update apt cache
+  apt:
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+

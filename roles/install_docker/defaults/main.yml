@@ -1,0 +1,10 @@
+---
+# defaults file for install_docker
+
+skip_playbook: true
+
+install_docker: true
+
+install_docker_compose: true
+
+install_docker_swarm: true

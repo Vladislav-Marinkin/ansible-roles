@@ -1,0 +1,17 @@
+---
+# ======================================
+# 📂 1️⃣ Подключение переменных
+# ======================================
+- name: Include variables
+  include_vars: vars/docker.yml
+
+# ==============================
+# 2️⃣ Установка Docker
+# ==============================
+- name: Install docker
+  include_tasks: install_docker.yml
+  when: "'new_servers' not in group_names and docker_install"
+
+- name: Install docker swarm
+  include_tasks: install_docker_sworm.yml
+  when: "'new_servers' not in group_names and docker_install and docker['swarm']"

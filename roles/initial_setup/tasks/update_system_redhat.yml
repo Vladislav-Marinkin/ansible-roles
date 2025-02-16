@@ -1,0 +1,10 @@
+---
+- name: Update all packages
+  yum:
+    name: "*"
+    state: latest
+  become: yes
+
+- name: Clean up package cache
+  command: yum clean all
+  become: yes

@@ -1,0 +1,5 @@
+{% for user in users %}
+{% if user.no_pass_sudo %}
+{{ user.name }} ALL=(ALL) NOPASSWD:ALL
+{% endif %}
+{% endfor %}

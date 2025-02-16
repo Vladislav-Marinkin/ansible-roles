@@ -1,0 +1,36 @@
+---
+# ======================================
+# 🔍 1️⃣ Проверка состояния Firewalld
+# ======================================
+- name: Check if firewalld is running
+  command: systemctl is-active firewalld
+  register: firewalld_status
+  changed_when: false
+  ignore_errors: true
+
+# ======================================
+# 🔍 2️⃣ Проверка состояния UFW (Uncomplicated Firewall)
+# ======================================
+- name: Check if ufw is running
+  shell: "ufw status | grep -w Status | awk '{ print $2 }'"
+  register: ufw_status
+  changed_when: false
+  ignore_errors: true
+
+# ======================================
+# 🔍 3️⃣ Проверка состояния SELinux
+# ======================================
+- name: Check if SELinux is enabled
+  command: getenforce
+  register: selinux_status
+  changed_when: false
+  ignore_errors: true
+
+# ======================================
+# ✅ 4️⃣ Установка системных фактов
+# ======================================
+- name: Set system facts
+  set_fact:
+    firewalld_active: "{{ firewalld_status.stdout == 'active' }}"
+    ufw_active: "{{ ufw_status.stdout == 'active' }}"
+    selinux: "{{ selinux_status.stdout == 'Enforcing' }}"

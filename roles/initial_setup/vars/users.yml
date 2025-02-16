@@ -1,0 +1,32 @@
+users:
+  - name: "admin"
+    password: "1234"
+    role: "admin"
+    root: true
+    no_pass_sudo: true
+    docker: true
+    ssh_key: true
+
+  - name: "ansible"
+    password: "1234"
+    role: "admin"
+    root: true
+    no_pass_sudo: true
+    docker: true
+    ssh_key: true
+
+  - name: "vlad"
+    password: "1234"
+    role: "admin"
+    root: true
+    no_pass_sudo: true
+    docker: true
+    ssh_key: true
+
+  - name: "user"
+    password: "1234"
+    role: "user"
+    root: false
+    no_pass_sudo: false
+    docker: false
+    ssh_key: true

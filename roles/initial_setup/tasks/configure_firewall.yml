@@ -1,0 +1,69 @@
+# =====================================================
+# 📌 1️⃣ Загружаем маппинг портов из внешнего файла
+# =====================================================
+- name: Load port mapping variables
+  include_vars: vars/ports.yml  # Загружаем список портов и их SELinux-типы
+
+- name: Load SSH configuration variables
+  include_vars: vars/ssh.yml  # Загружаем настройки SSH (port, PermitRootLogin, PasswordAuthentication)
+
+
+# =====================================================
+# 🔐 2️⃣ Разрешаем указанные порты в SELinux
+# =====================================================
+- name: Allow required ports in SELinux
+  community.general.seport:
+    ports: "{{ item }}"
+    proto: tcp
+    setype: "{{ port_type_map[item] | default(port_type_map['default']) }}"
+    state: present
+  loop: "{{ allow_ports | default([]) }}"
+  when: selinux | bool
+
+# =====================================================
+# 🔥 3️⃣ Открываем порты в Firewalld (TCP)
+# =====================================================
+- name: Ensure required TCP ports are open in Firewalld
+  firewalld:
+    port: "{{ item }}/tcp"
+    permanent: yes
+    state: enabled
+  loop: "{{ allow_ports | default([]) }}"
+  when: firewalld_active | bool
+  notify: Reload Firewalld
+
+# =====================================================
+# 🔥 4️⃣ Открываем порты в Firewalld (UDP)
+# =====================================================
+- name: Ensure required UDP ports are open in Firewalld
+  firewalld:
+    port: "{{ item }}/udp"
+    permanent: yes
+    state: enabled
+  loop: "{{ allow_ports | default([]) }}"
+  when: firewalld_active | bool
+  notify: Reload Firewalld
+
+# =====================================================
+# 🔓 5️⃣ Открываем порты в UFW (TCP)
+# =====================================================
+- name: Ensure required ports are open in UFW
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop: "{{ allow_ports | default([]) }}"
+  when: ufw_active | bool
+  notify: Reload UFW
+
+# =====================================================
+# 🔓 6️⃣ Открываем порты в UFW (UDP)
+# =====================================================
+- name: Ensure required ports are open in UFW
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: udp
+  loop: "{{ allow_ports | default([]) }}"
+  when: ufw_active | bool
+  notify: Reload UFW

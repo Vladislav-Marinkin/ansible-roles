@@ -1,0 +1,64 @@
+port_type_map:
+  # 🔹 Базовые сетевые сервисы
+  22: ssh_port_t                # SSH
+  23: telnet_port_t             # Telnet
+  25: smtp_port_t               # SMTP (почта)
+  53: dns_port_t                # DNS
+  67: dhcp_port_t               # DHCP
+  68: dhcp_port_t               # DHCP
+  69: tftp_port_t               # TFTP
+  80: http_port_t               # HTTP
+  110: pop3_port_t              # POP3 (почта)
+  123: ntp_port_t               # NTP (синхронизация времени)
+  143: imap_port_t              # IMAP (почта)
+  161: snmp_port_t              # SNMP (мониторинг)
+  389: ldap_port_t              # LDAP
+  443: http_port_t              # HTTPS
+  465: smtp_port_t              # SMTPS (защищенный почтовый протокол)
+  587: smtp_port_t              # SMTP STARTTLS
+  993: imaps_port_t             # IMAP с шифрованием
+  995: pop3s_port_t             # POP3 с шифрованием
+
+  # 🔹 Docker Swarm и Kubernetes
+  2376: docker_port_t           # Docker API TLS
+  2377: docker_port_t           # Docker Swarm менеджер
+  7946: cluster_port_t          # Docker Swarm ноды (TCP/UDP)
+  4789: vxlan_port_t            # Overlay network (Docker Swarm)
+
+  # 🔹 Web-серверы и API
+  8000: http_port_t             # HTTP (dev server)
+  8080: http_port_t             # HTTP (альтернативный)
+  8081: http_port_t             # HTTP (вторая версия)
+  8443: http_port_t             # HTTPS (альтернативный)
+  9000: http_port_t             # Web UI (например, Portainer)
+  9443: http_port_t             # Kubernetes API
+
+  # 🔹 Базы данных
+  1433: mssql_port_t            # Microsoft SQL Server
+  1521: oracle_port_t           # Oracle Database
+  3306: mysql_port_t            # MySQL
+  5432: postgresql_port_t       # PostgreSQL
+  6379: redis_port_t            # Redis
+  9200: elasticsearch_port_t    # Elasticsearch
+  27017: mongodb_port_t         # MongoDB
+
+  # 🔹 DevOps и CI/CD
+  8086: influxdb_port_t         # InfluxDB
+  9090: prometheus_port_t       # Prometheus
+  9092: kafka_port_t            # Kafka
+  3000: grafana_port_t          # Grafana
+  5000: docker_registry_port_t  # Docker Registry
+  8082: nexus_port_t            # Nexus Repository
+  8444: jenkins_port_t          # Jenkins
+
+  # 🔹 VPN и удаленный доступ
+  1194: openvpn_port_t          # OpenVPN
+  1701: l2tp_port_t             # L2TP VPN
+  4500: ipsec_port_t            # IPsec VPN
+
+  # 🔹 Разное
+  6667: irc_port_t              # IRC сервер
+  25565: minecraft_port_t       # Minecraft сервер
+
+  # 🔹 Фallback (если порт не найден)
+  default: unreserved_port_t

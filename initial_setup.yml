@@ -1,0 +1,12 @@
+---
+- name: Configure server
+  hosts: all
+  become: yes
+  roles:
+    - initial_setup
+
+- name: Install docker
+  hosts: all:!new_servers
+  become: yes
+  roles:
+    - install_docker

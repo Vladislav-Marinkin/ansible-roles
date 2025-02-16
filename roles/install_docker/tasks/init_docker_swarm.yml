@@ -1,0 +1,22 @@
+---
+# ===========================================
+# 🛠️ Инициализация Docker Swarm на менеджере
+# ===========================================
+
+# 🔹 Инициализируем Docker Swarm, указывая текущий IP-адрес в качестве рекламируемого
+- name: Initialize Docker Swarm
+  shell: docker swarm init --advertise-addr {{ ansible_default_ipv4.address }}
+  ignore_errors: true  # Игнорируем ошибки, например, если Swarm уже инициализирован
+
+# 🔑 Получаем токен для присоединения рабочих узлов (worker)
+- name: Get manager token
+  shell: docker swarm join-token -q worker
+  register: worker_token  # Сохраняем токен в переменную
+
+# 💾 Сохраняем токен в переменной для последующего использования
+- name: Save worker token
+  set_fact:
+    swarm_worker_token: "{{ worker_token.stdout }}"
+    swarm_manager_host: "{{ hostvars[inventory_hostname].ansible_hostname }}"
+  loop: "{{ groups['all'] }}"
+  run_once: true

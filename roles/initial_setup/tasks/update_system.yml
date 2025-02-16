@@ -1,0 +1,14 @@
+---
+# ======================================
+# 🔄 1️⃣ Обновление системы в зависимости от дистрибутива
+# ======================================
+
+# 🔹 Обновление для RedHat-based систем (RHEL, CentOS, Rocky, AlmaLinux)
+- name: Update RedHat OS family
+  include_tasks: update_system_redhat.yml
+  when: ansible_os_family == "RedHat"
+
+# 🔹 Обновление для Debian-based систем (Debian, Ubuntu)
+- name: Update Debian OS family
+  include_tasks: update_system_debian.yml
+  when: ansible_os_family == "Debian"

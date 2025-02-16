@@ -1,0 +1,106 @@
+all:
+  children:
+    web-app:
+      hosts:
+        web-app:
+          ansible_user: ansible
+          ansible_become: yes
+          ansible_become_user: root
+          docker: true
+          allow_ports: [443,80,8080,8081]
+
+    monitoring:
+      hosts:
+        monitoring:
+          ansible_user: ansible
+          ansible_become: yes
+          ansible_become_user: root
+          allow_ports: []
+
+    gitlab-ci:
+      hosts:
+        gitlab-ci:
+          ansible_user: ansible
+          ansible_become: yes
+          ansible_become_user: root
+          allow_ports: []
+        gitlab-runner:
+          ansible_user: ansible
+          ansible_become: yes
+          ansible_become_user: root
+          runner: true
+          allow_ports: []
+
+    docker-sworm:
+      hosts:
+        swarm-node-master-1:
+          ansible_user: ansible
+          ansible_become: yes
+          ansible_become_user: root
+          docker-sworm: true
+          master: true
+          allow_ports: [2377]
+        swarm-node-worker-1:
+          ansible_user: ansible
+          ansible_become: yes
+          ansible_become_user: root
+          docker-sworm: true
+          master: false
+          allow_ports: []
+        swarm-node-worker-2:
+          ansible_user: ansible
+          ansible_become: yes
+          ansible_become_user: root
+          docker-sworm: true
+          master: false
+          allow_ports: []
+        swarm-node-worker-3:
+          ansible_user: ansible
+          ansible_become: yes
+          ansible_become_user: root
+          docker-sworm: true
+          master: false
+          allow_ports: []
+          
+    new_servers:
+      hosts: 
+        192.168.1.18:
+          ansible_user: root
+          ansible_become: yes
+          ansible_become_user: root
+          hostname: web-app
+        192.168.1.29:
+          ansible_user: root
+          ansible_become: yes
+          ansible_become_user: root
+          hostname: monitoring
+        192.168.1.28:
+          ansible_user: root
+          ansible_become: yes
+          ansible_become_user: root
+          hostname: gitlab-runner
+        192.168.1.23:
+          ansible_user: root
+          ansible_become: yes
+          ansible_become_user: root
+          hostname: gitlab-ci
+        192.168.1.30:
+          ansible_user: root
+          ansible_become: yes
+          ansible_become_user: root
+          hostname: sworm-node-master-1
+        192.168.1.31:
+          ansible_user: root
+          ansible_become: yes
+          ansible_become_user: root
+          hostname: sworm-node-worker-1
+        192.168.1.33:
+          ansible_user: root
+          ansible_become: yes
+          ansible_become_user: root
+          hostname: sworm-node-worker-2
+        192.168.1.32:
+          ansible_user: root
+          ansible_become: yes
+          ansible_become_user: root
+          hostname: sworm-node-worker-3

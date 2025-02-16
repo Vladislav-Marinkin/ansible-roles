@@ -1,0 +1,3 @@
+- name: Join workers to Swarm
+  shell: docker swarm join --token {{ swarm_worker_token }} {{ swarm_manager_host }}:2377
+  when: inventory_hostname != "manager"

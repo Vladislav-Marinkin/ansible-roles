@@ -1,0 +1,39 @@
+---
+# ============================================================
+# 🚨  Остановка выполнения Playbook при `skip_playbook: true`
+# ============================================================
+
+- name: Show skip message
+  debug:
+    msg: "🚨 Playbook execution is disabled by `skip_playbook`. Exiting..."
+  run_once: true
+  when: skip_playbook | default(false)
+
+- name: Stop execution if `skip_playbook` is enabled
+  meta: end_play
+  when: skip_playbook | default(false)
+
+# ======================================
+# 📂 1️⃣ Подключение переменных
+# ======================================
+
+- name: Include variables
+  include_vars: vars/docker.yml
+
+# ==============================
+# 2️⃣ Установка Docker
+# ==============================
+
+# 🔹 Устанавливаем Docker, если включено в `defaults` и хост отмечен в инвентори
+- name: Install Docker
+  include_tasks: install_docker.yml
+  when:
+    - install_docker | default(false)
+    - hostvars[inventory_hostname].get('docker', false)
+
+# 🔹 Устанавливаем Docker Swarm, если включено в `defaults` и хост отмечен в инвентори
+- name: Install Docker Swarm
+  include_tasks: install_docker_swarm.yml
+  when: 
+    - install_docker_swarm | default(false)
+    - hostvars[inventory_hostname].get('docker-sworm', false)

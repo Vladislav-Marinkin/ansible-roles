@@ -1,0 +1,17 @@
+# ======================================
+# 🛠️ 5️⃣ Установка Docker Compose
+# ======================================
+
+# 📥 Скачиваем бинарник Docker Compose нужной версии
+- name: Download Docker Compose
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/{{ docker_settings.compose_version }}/docker-compose-{{ ansible_system | lower }}-{{ ansible_architecture }}"
+    dest: /usr/local/bin/docker-compose
+    mode: '0755'
+
+# 🔗 Создаем символическую ссылку для удобного вызова Docker Compose
+- name: Create symlink for Docker Compose
+  file:
+    src: /usr/local/bin/docker-compose
+    dest: /usr/bin/docker-compose
+    state: link

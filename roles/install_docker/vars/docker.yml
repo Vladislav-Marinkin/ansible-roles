@@ -1,0 +1,4 @@
+docker_settings:
+  version: "v20.10.8"
+  compose_version: "v2.33.0"
+  users: [admin,vlad,ansible]

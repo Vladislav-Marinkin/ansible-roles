@@ -1,0 +1,5 @@
+# Custom SSH Configuration (Managed by Ansible)
+
+Port {{ port }}
+PermitRootLogin {{ permitRootLogin | ternary( 'yes', 'no') }}
+PasswordAuthentication {{ passwordAuthentication | ternary( 'yes', 'no') }}
