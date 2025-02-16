@@ -1,10 +1,16 @@
 ---
-- name: Update all packages
-  yum:
-    name: "*"
-    state: latest
-  become: yes
+# ======================================
+# 🔄 1️⃣ Обновление пакетов и очистка кеша
+# ======================================
 
-- name: Clean up package cache
-  command: yum clean all
-  become: yes
+# 🔹 Обновление всех пакетов до последней версии
+- name: Update all packages 
+  yum:
+    name: "*" 
+    state: latest
+  become: yes  
+
+# 🔹 Очистка кэша пакетов yum
+- name: Clean up package cache 
+  command: yum clean all  
+  become: yes  

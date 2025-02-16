@@ -9,7 +9,7 @@
   ignore_errors: true
 
 # ======================================
-# 🔍 2️⃣ Проверка состояния UFW (Uncomplicated Firewall)
+# 🔍 2️⃣ Проверка состояния UFW 
 # ======================================
 - name: Check if ufw is running
   shell: "ufw status | grep -w Status | awk '{ print $2 }'"

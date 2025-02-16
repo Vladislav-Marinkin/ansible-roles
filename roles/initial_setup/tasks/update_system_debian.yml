@@ -1,15 +1,22 @@
 ---
-- name: Update package lists
-  apt:
-    update_cache: yes
-  become: yes
+# ======================================
+# 🔄 1️⃣ Обновление пакетов на системе
+# ======================================
 
-- name: Upgrade all packages
+# 🔹 Обновление списка пакетов
+- name: Update package lists 
   apt:
-    upgrade: dist
-  become: yes
+    update_cache: yes  
+  become: yes 
 
-- name: Remove unnecessary packages
+# 🔹 Обновление всех пакетов
+- name: Upgrade all packages  
   apt:
-    autoremove: yes
-  become: yes
+    upgrade: dist  
+  become: yes  
+
+# 🔹 Удаление ненужных пакетов
+- name: Remove unnecessary packages  
+  apt:
+    autoremove: yes  
+  become: yes  
