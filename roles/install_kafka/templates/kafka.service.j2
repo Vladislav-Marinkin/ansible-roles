@@ -5,7 +5,6 @@ After=network.target
 [Service]
 Type=simple
 User={{ kafka_user }}
-Group={{ kafka_group }}
 ExecStart={{ kafka_install_dir }}/bin/kafka-server-start.sh {{ kafka_config_dir }}/kraft/server.properties
 ExecStop={{ kafka_install_dir }}/bin/kafka-server-stop.sh
 Restart=always

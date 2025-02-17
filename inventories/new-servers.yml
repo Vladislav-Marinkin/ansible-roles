@@ -1,0 +1,62 @@
+new_servers:
+  hosts: 
+    192.168.1.18:
+      ansible_user: root
+      ansible_become: yes
+      ansible_become_user: root
+      hostname: web-server
+    192.168.1.29:
+      ansible_user: root
+      ansible_become: yes
+      ansible_become_user: root
+      hostname: monitoring
+    192.168.1.28:
+      ansible_user: root
+      ansible_become: yes
+      ansible_become_user: root
+      hostname: gitlab-runner
+    192.168.1.23:
+      ansible_user: root
+      ansible_become: yes
+      ansible_become_user: root
+      hostname: gitlab-ci
+    192.168.1.30:
+      ansible_user: root
+      ansible_become: yes
+      ansible_become_user: root
+      hostname: swarm-node-master-1
+    192.168.1.31:
+      ansible_user: root
+      ansible_become: yes
+      ansible_become_user: root
+      hostname: swarm-node-worker-1
+    192.168.1.33:
+      ansible_user: root
+      ansible_become: yes
+      ansible_become_user: root
+      hostname: swarm-node-worker-2
+    192.168.1.32:
+      ansible_user: root
+      ansible_become: yes
+      ansible_become_user: root
+      hostname: swarm-node-worker-3
+    192.168.1.38:
+      ansible_user: root
+      ansible_become: yes
+      ansible_become_user: root
+      hostname: test-node
+    192.168.1.43:
+      ansible_user: root
+      ansible_become: yes
+      ansible_become_user: root
+      hostname: kafka-node-1
+    192.168.1.45:
+      ansible_user: root
+      ansible_become: yes
+      ansible_become_user: root
+      hostname: kafka-node-2
+    192.168.1.42:
+      ansible_user: root
+      ansible_become: yes
+      ansible_become_user: root
+      hostname: kafka-node-3

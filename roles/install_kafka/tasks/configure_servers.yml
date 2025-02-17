@@ -1,16 +1,25 @@
-- name: Install Java (OpenJDK 11)
+---
+# ===============================================
+# ☕ Установка Java (OpenJDK 11)
+# ===============================================
+
+- name: Install Java (OpenJDK 11) on Debian
   package:
     name: "{{ java_package_debian }}"
     state: present
   when: ansible_os_family == "Debian"
 
-- name: Install Java (OpenJDK 11)
+- name: Install Java (OpenJDK 11) on RedHat
   package:
     name: "{{ java_package_rethat }}"
     state: present
   when: ansible_os_family == "RedHat"
 
-- name: Create kafka user and group
+# ===============================================
+# 👥 Создание пользователя и группы для Kafka
+# ===============================================
+
+- name: Create kafka group
   group:
     name: "{{ kafka_group }}"
     state: present
@@ -20,6 +29,10 @@
     name: "{{ kafka_user }}"
     group: "{{ kafka_group }}"
     state: present
+
+# ===============================================
+# 📂 Создание директорий для Kafka
+# ===============================================
 
 - name: Create Kafka directories
   file:
@@ -32,4 +45,4 @@
     - "{{ kafka_install_dir }}"
     - "{{ kafka_data_dir }}"
     - "{{ kafka_logs_dir }}"
-    - "{{ kafka_config_dir }}/kraft-{{ hostvars[inventory_hostname]['role'] }}-logs"
+    - "{{ kafka_config_dir }}"

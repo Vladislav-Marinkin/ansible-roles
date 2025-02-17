@@ -1,16 +1,25 @@
 ---
-# vars file for install_kafka
+# ===============================================
+# 📦 Переменные для установки и конфигурации Kafka
+# ===============================================
 
-kafka_version: "3.9.0"
-kafka_download_url: "https://downloads.apache.org/kafka/{{ kafka_version }}/kafka_2.13-{{ kafka_version }}.tgz"
-java_package_debian: "openjdk-11-jdk"
-java_package_rethat: "java-11-openjdk-devel"
-kafka_group: "kafka"
-kafka_user: "kafka"
-kafka_install_dir: "/opt/kafka"
-kafka_data_dir: "/var/lib/kafka"
-kafka_logs_dir: "/var/log/kafka"
-kafka_config_dir: "{{ kafka_install_dir }}/config"
+kafka_version: "3.9.0"  # Версия Kafka
+kafka_download_url: "https://downloads.apache.org/kafka/{{ kafka_version }}/kafka_2.13-{{ kafka_version }}.tgz"  # Ссылка для загрузки Kafka
 
-listeners_port: 9092
-controller_port: 9093
+# Установка Java
+java_package_debian: "openjdk-11-jdk"  # Для Debian
+java_package_rethat: "java-11-openjdk-devel"  # Для RedHat
+
+# Настройка пользователя и группы Kafka
+kafka_group: "kafka"  # Группа Kafka
+kafka_user: "kafka"  # Пользователь Kafka
+
+# Директории для установки и данных Kafka
+kafka_install_dir: "/opt/kafka"  # Путь установки Kafka
+kafka_data_dir: "/var/lib/kafka"  # Путь для хранения данных Kafka
+kafka_logs_dir: "/var/log/kafka"  # Путь для логов Kafka
+kafka_config_dir: "{{ kafka_install_dir }}/config"  # Путь для конфигурации Kafka
+
+# Порты для слушателей и контроллеров
+listeners_port: 9092  # Порт для слушателей Kafka
+controller_port: 9093  # Порт для контроллеров Kafka

@@ -1,49 +1,44 @@
 ---
-# tasks file for install_kafka
-
 # ============================================================
-# 🚨  Остановка выполнения Playbook при `skip_playbook: true`
+# 🚨 Остановка выполнения Playbook при `skip_playbook: true`
 # ============================================================
 - name: Show skip message
   debug:
     msg: "🚨 Playbook execution is disabled by `skip_playbook`. Exiting..."
   run_once: true
   when: skip_playbook | default(false)
-
+  
 - name: Stop execution if `skip_playbook` is enabled
   meta: end_play
   when: skip_playbook | default(false)
 
+# ============================================================
+# 🚨 Удаление кластера, если переменная `delete_cluster` установлена в true
+# ============================================================
+- name: Delete cluster
+  include_tasks: delete_cluster.yml
+  when: delete_cluster
+
+# ============================================================
+# 🖥️ Настройка серверов
+# ============================================================
 - name: Configure servers
   include_tasks: configure_servers.yml
-  #when: false
 
+# ============================================================
+# 📦 Установка Kafka
+# ============================================================
 - name: Install kafka
   include_tasks: install_kafka.yml
-  #when: false
 
-- name: Stop Kafka service
-  systemd:
-    name: kafka
-    state: stopped
-    enabled: false
-  when: false
-
+# ============================================================
+# ⚙️ Настройка Kafka
+# ============================================================
 - name: Configure kafka
   include_tasks: configure_kafka.yml
 
-- name: Reload systemd to recognize Kafka service
-  systemd:
-    daemon_reload: yes
-
-- name: Enable Kafka service
-  systemd:
-    name: kafka
-    enabled: yes
-    state: started
-
-- name: Start Kafka service
-  systemd:
-    name: kafka
-    state: restarted
-    enabled: true
+# ============================================================
+# 🚀 Запуск сервиса Kafka
+# ============================================================
+- name: launching the kafka service
+  include_tasks: launching_kafka_service.yml

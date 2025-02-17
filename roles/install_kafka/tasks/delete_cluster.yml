@@ -1,0 +1,37 @@
+---
+# ===============================================
+# 🛑 Остановка службы Kafka
+# ===============================================
+
+- name: Stop Kafka service
+  systemd:
+    name: kafka
+    state: stopped
+    enabled: false
+
+# ===============================================
+# 🗑️ Удаление логов и данных Kafka
+# ===============================================
+
+- name: Remove Kafka logs and data directories
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ kafka_install_dir }}"
+    - "{{ kafka_data_dir }}"
+    - "{{ kafka_logs_dir }}"
+
+# ===============================================
+# 👤 Удаление пользователя и группы Kafka
+# ===============================================
+
+- name: Remove Kafka user 
+  user:
+    name: kafka
+    state: absent
+
+- name: Remove Kafka group
+  group:
+    name: kafka
+    state: absent

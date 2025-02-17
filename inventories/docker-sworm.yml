@@ -1,0 +1,30 @@
+docker-sworm:
+  hosts:
+    swarm-node-master-1:
+      ansible_user: ansible
+      ansible_become: yes
+      ansible_become_user: root
+      docker-sworm: true
+      master: true
+      allow_ports: [2377]
+    swarm-node-worker-1:
+      ansible_user: ansible
+      ansible_become: yes
+      ansible_become_user: root
+      docker-sworm: true
+      master: false
+      allow_ports: []
+    swarm-node-worker-2:
+      ansible_user: ansible
+      ansible_become: yes
+      ansible_become_user: root
+      docker-sworm: true
+      master: false
+      allow_ports: []
+    swarm-node-worker-3:
+      ansible_user: ansible
+      ansible_become: yes
+      ansible_become_user: root
+      docker-sworm: true
+      master: false
+      allow_ports: []

@@ -49,17 +49,17 @@
   roles:
     - install_docker
 
-- name: Install kafka
-  hosts: kafka-servers
-  become: yes
-  roles:
-    - install_kafka
-
 - name: Install nginx
   hosts: web-servers
   become: yes
   roles:
     - install_nginx
+
+- name: Install kafka
+  hosts: kafka-servers
+  become: yes
+  roles:
+    - install_kafka
 
 - name: Install gitlab
   hosts: gitlab-servers

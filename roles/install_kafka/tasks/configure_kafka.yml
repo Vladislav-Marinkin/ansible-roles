@@ -1,3 +1,8 @@
+---
+# ===============================================
+# 🛠️ Настройка конфигурации Kafka и создание сервисов
+# ===============================================
+
 - name: Set up Kafka configuration file
   template:
     src: kafka-server.properties.j2
@@ -14,5 +19,18 @@
     group: root
     mode: "0644"
 
-#Связать кластер 
-#sudo /opt/kafka/bin/kafka-storage.sh format --config /opt/kafka/config/kraft/server.properties --cluster-id 89us-7aFRNSH7PmRjotm-w
+# ====================================================
+# 🔑 Генерация случайного UUID для кластера Kafka
+# ====================================================
+
+- name: Run generate random UUID
+  command: /opt/kafka/bin/kafka-storage.sh random-uuid
+  register: kafka_uuid_output
+  run_once: true
+
+# ==========================================================
+# 📂 Инициализация логов для KRaft (Kafka Raft) с UUID
+# ==========================================================
+- name: Init kraft logs dir
+  become_user: "{{ kafka_user }}"
+  shell: "{{ kafka_install_dir }}/bin/kafka-storage.sh format --config {{ kafka_config_dir }}/kraft/server.properties --cluster-id {{ kafka_uuid_output.stdout }}"

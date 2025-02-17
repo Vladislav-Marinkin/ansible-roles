@@ -2,4 +2,4 @@
   hosts: kafka-servers
   become: yes
   roles:
-    - install_kafka
+    - install_nginx
