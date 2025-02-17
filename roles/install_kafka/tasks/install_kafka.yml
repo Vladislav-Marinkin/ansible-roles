@@ -11,6 +11,14 @@
     extra_opts:
       - "--strip-components=1"
 
+- name: Set ownership for Kafka files
+  file:
+    path: "{{ kafka_install_dir }}"
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+    recurse: yes
+    state: directory
+
 - name: Remove Kafka tarball to clean up
   file:
     path: "/tmp/kafka_{{ kafka_version }}.tgz"

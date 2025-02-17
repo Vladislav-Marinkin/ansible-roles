@@ -32,4 +32,4 @@
     - "{{ kafka_install_dir }}"
     - "{{ kafka_data_dir }}"
     - "{{ kafka_logs_dir }}"
-    - "{{ kafka_config_dir }}"
+    - "{{ kafka_config_dir }}/kraft-{{ hostvars[inventory_hostname]['role'] }}-logs"

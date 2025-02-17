@@ -16,10 +16,17 @@
 
 - name: Configure servers
   include_tasks: configure_servers.yml
-  when: false
+  #when: false
 
 - name: Install kafka
   include_tasks: install_kafka.yml
+  #when: false
+
+- name: Stop Kafka service
+  systemd:
+    name: kafka
+    state: stopped
+    enabled: false
   when: false
 
 - name: Configure kafka
@@ -39,4 +46,4 @@
   systemd:
     name: kafka
     state: restarted
-    enabled: yes
+    enabled: true

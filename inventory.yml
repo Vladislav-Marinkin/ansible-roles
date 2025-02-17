@@ -70,17 +70,17 @@ all:
           ansible_become_user: root
           role: 'controller'
           allow_ports: [9092,9093,9999]
-        kafka-node-2:
-          ansible_user: ansible
-          ansible_become: yes
-          ansible_become_user: root
-          role: 'broker'
-          allow_ports: [9092,9093,9999]
         kafka-node-3:
           ansible_user: ansible
           ansible_become: yes
           ansible_become_user: root
           role: 'controller'
+          allow_ports: [9092,9093,9999]
+        kafka-node-2:
+          ansible_user: ansible
+          ansible_become: yes
+          ansible_become_user: root
+          role: 'broker'
           allow_ports: [9092,9093,9999]
         kafka-node-4:
           ansible_user: ansible
