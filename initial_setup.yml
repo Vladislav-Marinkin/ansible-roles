@@ -50,7 +50,7 @@
     - install_docker
 
 - name: Install kafka
-  hosts: web-servers
+  hosts: kafka-servers
   become: yes
   roles:
     - install_kafka

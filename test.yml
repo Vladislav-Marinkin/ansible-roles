@@ -1,53 +1,5 @@
-- name: Check if all servers are unreachable
-  hosts: new_servers
-  ignore_unreachable: yes
-  tasks:
-    - name: Initialize unreachable_hosts list
-      set_fact:
-        unreachable_hosts: []
-
-    - name: Check if host is unreachable
-      set_fact:
-        #unreachable_hosts: "{{ unreachable_hosts | default([]) + [hostvars[item]['inventory_hostname']] }}"
-        unreachable_hosts: "{{ unreachable_hosts | default([]) + [inventory_hostname] }}"
-      #when: hostvars[inventory_hostname].ansible_facts | length == 0
-      when: ansible_facts | length == 0
-      #loop: "{{ groups['new_servers'] }}"
-      #run_once: true
-
-    - name: Fail if all servers are unreachable
-      debug:
-        msg: "Server - {{ [inventory_hostname] }} fail"
-      when: not unreachable_hosts | length == ansible_play_hosts | length
-      #when: unreachable_hosts | length == ansible_play_hosts | length
-
-    - name: Create a list of reachable hosts
-      set_fact:
-        reachable_hosts: "{{ reachable_hosts | default([]) + [inventory_hostname] }}"
-      when: ansible_facts | length != 0
-
-    - name: reachable_hosts
-      debug:
-        msg: "{{ reachable_hosts[0] }}"
-      when: reachable_hosts | length != 0
-
-    - name: Gather all reachable_hosts from all hosts
-      set_fact:
-        all_reachable_hosts: "{{ groups['all'] | map('extract', hostvars, 'reachable_hosts') | map('default', []) | list | flatten }}"
-
-    - name: Show accumulated reachable_hosts
-      debug:
-        msg: "{{ all_reachable_hosts }}"
-      run_once: true
-
-    - name: Add a host to group
-      add_host:
-        name: "{{ item }}"
-        groups: reachable_hosts
-      loop: "{{ all_reachable_hosts }}"
-      #run_once: true
-
-    - name: Verify new group
-      debug:
-        msg: "{{ groups }}"
-      run_once: true
+- name: Install kafka
+  hosts: kafka-servers
+  become: yes
+  roles:
+    - install_kafka

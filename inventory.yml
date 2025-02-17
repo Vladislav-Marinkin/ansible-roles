@@ -68,16 +68,25 @@ all:
           ansible_user: ansible
           ansible_become: yes
           ansible_become_user: root
+          role: 'controller'
           allow_ports: [9092,9093,9999]
         kafka-node-2:
           ansible_user: ansible
           ansible_become: yes
           ansible_become_user: root
+          role: 'broker'
           allow_ports: [9092,9093,9999]
         kafka-node-3:
           ansible_user: ansible
           ansible_become: yes
           ansible_become_user: root
+          role: 'controller'
+          allow_ports: [9092,9093,9999]
+        kafka-node-4:
+          ansible_user: ansible
+          ansible_become: yes
+          ansible_become_user: root
+          role: 'broker'
           allow_ports: [9092,9093,9999]
           
     new_servers:
@@ -127,18 +136,23 @@ all:
           ansible_become: yes
           ansible_become_user: root
           hostname: test-node
-        192.168.1.41:
+        192.168.1.43:
           ansible_user: root
           ansible_become: yes
           ansible_become_user: root
           hostname: kafka-node-1
-        192.168.1.39:
+        192.168.1.45:
           ansible_user: root
           ansible_become: yes
           ansible_become_user: root
           hostname: kafka-node-2
-        192.168.1.40:
+        192.168.1.42:
           ansible_user: root
           ansible_become: yes
           ansible_become_user: root
           hostname: kafka-node-3
+        192.168.1.44:
+          ansible_user: root
+          ansible_become: yes
+          ansible_become_user: root
+          hostname: kafka-node-4

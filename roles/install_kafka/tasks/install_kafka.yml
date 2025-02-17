@@ -1,0 +1,17 @@
+- name: Download Kafka tarball
+  get_url:
+    url: "{{ kafka_download_url }}"
+    dest: "/tmp/kafka_{{ kafka_version }}.tgz"
+
+- name: Extract Kafka tarball
+  unarchive:
+    src: "/tmp/kafka_{{ kafka_version }}.tgz"
+    dest: "{{ kafka_install_dir }}"
+    remote_src: true
+    extra_opts:
+      - "--strip-components=1"
+
+- name: Remove Kafka tarball to clean up
+  file:
+    path: "/tmp/kafka_{{ kafka_version }}.tgz"
+    state: absent

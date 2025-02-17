@@ -1,2 +1,42 @@
 ---
 # tasks file for install_kafka
+
+# ============================================================
+# 🚨  Остановка выполнения Playbook при `skip_playbook: true`
+# ============================================================
+- name: Show skip message
+  debug:
+    msg: "🚨 Playbook execution is disabled by `skip_playbook`. Exiting..."
+  run_once: true
+  when: skip_playbook | default(false)
+
+- name: Stop execution if `skip_playbook` is enabled
+  meta: end_play
+  when: skip_playbook | default(false)
+
+- name: Configure servers
+  include_tasks: configure_servers.yml
+  when: false
+
+- name: Install kafka
+  include_tasks: install_kafka.yml
+  when: false
+
+- name: Configure kafka
+  include_tasks: configure_kafka.yml
+
+- name: Reload systemd to recognize Kafka service
+  systemd:
+    daemon_reload: yes
+
+- name: Enable Kafka service
+  systemd:
+    name: kafka
+    enabled: yes
+    state: started
+
+- name: Start Kafka service
+  systemd:
+    name: kafka
+    state: restarted
+    enabled: yes

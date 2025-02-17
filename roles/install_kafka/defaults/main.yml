@@ -1,2 +1,4 @@
 ---
 # defaults file for install_kafka
+
+skip_playbook: false

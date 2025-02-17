@@ -1,0 +1,35 @@
+- name: Install Java (OpenJDK 11)
+  package:
+    name: "{{ java_package_debian }}"
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install Java (OpenJDK 11)
+  package:
+    name: "{{ java_package_rethat }}"
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Create kafka user and group
+  group:
+    name: "{{ kafka_group }}"
+    state: present
+
+- name: Create kafka user
+  user:
+    name: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+    state: present
+
+- name: Create Kafka directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+    mode: "0755"
+  with_items:
+    - "{{ kafka_install_dir }}"
+    - "{{ kafka_data_dir }}"
+    - "{{ kafka_logs_dir }}"
+    - "{{ kafka_config_dir }}"
