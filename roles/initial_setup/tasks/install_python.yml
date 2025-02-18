@@ -1,0 +1,37 @@
+# =========================================================
+# 🐍 Установка Python на различных системах
+# =========================================================
+
+# 🔹 Установка Python на системах на базе Debian (Ubuntu, Debian)
+- name: Install Python on Debian-based systems
+  raw: |
+    apt update -y && apt install -y python3
+  when: ansible_os_family == "Debian"
+  changed_when: false
+
+# 🔹 Установка Python на системах на базе RHEL (CentOS, RHEL, Rocky, AlmaLinux)
+- name: Install Python on RHEL-based systems (CentOS, RHEL, Rocky, AlmaLinux)
+  raw: |
+    yum install -y python3 || dnf install -y python3
+  when: ansible_os_family == "RedHat"
+  changed_when: false
+
+# 🔹 Установка Python на системах SUSE (openSUSE, SLES)
+- name: Install Python on SUSE-based systems (openSUSE, SLES)
+  raw: |
+    zypper install -y python3
+  when: ansible_os_family == "Suse"
+  changed_when: false
+
+# 🔹 Установка Python на Arch Linux
+- name: Install Python on Arch Linux
+  raw: |
+    pacman -Sy --noconfirm python
+  when: ansible_distribution == "Archlinux"
+  changed_when: false
+
+# 🔹 Остановка выполнения при неподдерживаемой ОС
+- name: Fail if OS is unsupported
+  fail:
+    msg: "Unsupported OS detected: {{ ansible_distribution }}"
+  when: ansible_os_family not in ["Debian", "RedHat", "Suse"] and ansible_distribution not in ["Fedora", "Amazon", "Archlinux"]

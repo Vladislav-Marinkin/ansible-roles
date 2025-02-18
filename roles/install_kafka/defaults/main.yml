@@ -3,6 +3,4 @@
 
 skip_playbook: false
 
-delete_cluster: false
-
 install_kafka_ui: false

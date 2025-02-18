@@ -1,42 +1,36 @@
----
-# ===============================================
-# 📥 Загрузка архива Kafka
-# ===============================================
+# ============================================================
+# 🔍 Проверка статуса сервиса Kafka
+# ============================================================
+- name: Check if Kafka service
+  include_tasks: check_kafka_service.yml
 
-- name: Download Kafka tarball
-  get_url:
-    url: "{{ kafka_download_url }}"
-    dest: "/tmp/kafka_{{ kafka_version }}.tgz"
+# ============================================================
+# 🚨 Удаление кластера, если переменная `delete_cluster` установлена в true
+# ============================================================
+- name: Delete cluster
+  include_tasks: delete_cluster.yml
+  when: kafka_status == 'active'
 
-# ===============================================
-# 📦 Извлечение архива Kafka
-# ===============================================
+# ============================================================
+# 🖥️ Настройка серверов
+# ============================================================
+- name: Configure servers
+  include_tasks: configure_servers.yml
 
-- name: Extract Kafka tarball
-  unarchive:
-    src: "/tmp/kafka_{{ kafka_version }}.tgz"
-    dest: "{{ kafka_install_dir }}"
-    remote_src: true
-    extra_opts:
-      - "--strip-components=1"
+# ============================================================
+# 📦 Загрузка и распаковка файлов Kafka
+# ============================================================
+- name: Downloading and unpacking Kafka files
+  include_tasks: downloading_unpacking_kafka.yml
 
-# ===============================================
-# 🔑 Установка прав на файлы Kafka
-# ===============================================
+# ============================================================
+# ⚙️ Настройка Kafka
+# ============================================================
+- name: Configure kafka
+  include_tasks: configure_kafka.yml
 
-- name: Set ownership for Kafka files
-  file:
-    path: "{{ kafka_install_dir }}"
-    owner: "{{ kafka_user }}"
-    group: "{{ kafka_group }}"
-    recurse: yes
-    state: directory
-
-# ===============================================
-# 🧹 Удаление архива Kafka для очистки
-# ===============================================
-
-- name: Remove Kafka tarball to clean up
-  file:
-    path: "/tmp/kafka_{{ kafka_version }}.tgz"
-    state: absent
+# ============================================================
+# 🚀 Запуск сервиса Kafka
+# ============================================================
+- name: launching the kafka service
+  include_tasks: launching_kafka_service.yml

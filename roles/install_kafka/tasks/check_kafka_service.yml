@@ -1,0 +1,17 @@
+- name: Check if Kafka service is running
+  systemd:
+    name: kafka
+    state: started
+  register: kafka_service_status
+  ignore_errors: true
+  changed_when: false
+
+- name: Set Kafka status to active if the service is running
+  set_fact:
+    kafka_status: "active"
+  when: not kafka_service_status.failed
+
+- name: Set Kafka status to inactive if the service is not running
+  set_fact:
+    kafka_status: "inactive"
+  when: kafka_service_status.failed

@@ -1,0 +1,42 @@
+---
+# ===============================================
+# 📥 Загрузка архива Kafka
+# ===============================================
+
+- name: Download Kafka tarball
+  get_url:
+    url: "{{ kafka_download_url }}"
+    dest: "/tmp/kafka_{{ kafka_version }}.tgz"
+
+# ===============================================
+# 📦 Извлечение архива Kafka
+# ===============================================
+
+- name: Extract Kafka tarball
+  unarchive:
+    src: "/tmp/kafka_{{ kafka_version }}.tgz"
+    dest: "{{ kafka_install_dir }}"
+    remote_src: true
+    extra_opts:
+      - "--strip-components=1"
+
+# ===============================================
+# 🔑 Установка прав на файлы Kafka
+# ===============================================
+
+- name: Set ownership for Kafka files
+  file:
+    path: "{{ kafka_install_dir }}"
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+    recurse: yes
+    state: directory
+
+# ===============================================
+# 🧹 Удаление архива Kafka для очистки
+# ===============================================
+
+- name: Remove Kafka tarball to clean up
+  file:
+    path: "/tmp/kafka_{{ kafka_version }}.tgz"
+    state: absent

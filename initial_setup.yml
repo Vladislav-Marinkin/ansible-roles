@@ -56,7 +56,7 @@
     - install_nginx
 
 - name: Install kafka
-  hosts: kafka-servers
+  hosts: kafka-servers,web-servers
   become: yes
   roles:
     - install_kafka

@@ -18,15 +18,21 @@
 - name: Run system checks
   include_tasks: check_system.yml
 
+# ===================================================
+# 2️⃣ Установка Python (если отсутствует) для Ansible
+# ===================================================
+- name: Install Python for Ansible
+  include_tasks: install_python.yml
+
 # ==========================================
-# 2️⃣ Открытие необходимых портов (Firewall)
+# 3️⃣ Открытие необходимых портов (Firewall)
 # ==========================================
 - name: Ensure required ports are open
   include_tasks: configure_firewall.yml
   when: allow_ports | default([]) | length > 0  # Выполняем только если указаны порты
 
 # ==============================
-# 3️⃣ Настройка hostname
+# 4️⃣ Настройка hostname
 # ==============================
 - name: Change hostnames to local host
   include_tasks: configure_hostnames_local.yml
@@ -37,21 +43,21 @@
   when: "'new_servers' not in group_names and change_hostnames"
 
 # ==============================
-# 4️⃣ Создание пользователей
+# 5️⃣ Создание пользователей
 # ==============================
 - name: Include tasks for users creation
   include_tasks: create_users.yml
   when: user_created
 
 # ==============================
-# 5️⃣ Настройка SSH
+# 6️⃣ Настройка SSH
 # ==============================
 - name: Configure ssh
   include_tasks: configure_ssh.yml
   when: edit_ssh_settings
 
 # ==============================
-# 6️⃣ Обновление системы
+# 7️⃣ Обновление системы
 # ==============================
 - name: Update system
   include_tasks: update_system.yml

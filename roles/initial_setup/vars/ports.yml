@@ -19,12 +19,6 @@ port_type_map:
   993: imaps_port_t             # IMAP с шифрованием
   995: pop3s_port_t             # POP3 с шифрованием
 
-  # 🔹 Docker Swarm и Kubernetes
-  2376: docker_port_t           # Docker API TLS
-  2377: docker_port_t           # Docker Swarm менеджер
-  7946: cluster_port_t          # Docker Swarm ноды (TCP/UDP)
-  4789: vxlan_port_t            # Overlay network (Docker Swarm)
-
   # 🔹 Web-серверы и API
   8000: http_port_t             # HTTP (dev server)
   8080: http_port_t             # HTTP (альтернативный)

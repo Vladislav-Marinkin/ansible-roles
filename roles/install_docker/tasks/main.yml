@@ -36,4 +36,4 @@
   include_tasks: install_docker_swarm.yml
   when: 
     - install_docker_swarm | default(false)
-    - hostvars[inventory_hostname].get('docker-sworm', false)
+    - hostvars[inventory_hostname].get('docker-swarm', false)

@@ -34,3 +34,22 @@
     firewalld_active: "{{ firewalld_status.stdout == 'active' }}"
     ufw_active: "{{ ufw_status.stdout == 'active' }}"
     selinux: "{{ selinux_status.stdout == 'Enforcing' }}"
+
+# ======================================
+# 🔍 4️⃣ Проверка наличия Python
+# ======================================
+- name: Check if Python is installed
+  raw: "command -v python3 || command -v python"
+  register: python_check
+  changed_when: false
+  ignore_errors: true
+
+# ======================================
+# ✅ 5️⃣ Установка системных фактов
+# ======================================
+- name: Set system facts
+  set_fact:
+    firewalld_active: "{{ firewalld_status.stdout == 'active' }}"
+    ufw_active: "{{ ufw_status.stdout == 'active' }}"
+    selinux: "{{ selinux_status.stdout == 'Enforcing' }}"
+    python_installed: "{{ python_check.stdout != '' }}"
