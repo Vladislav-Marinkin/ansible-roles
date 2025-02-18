@@ -27,9 +27,7 @@
 # 🔹 Устанавливаем Docker, если включено в `defaults` и хост отмечен в инвентори
 - name: Install Docker
   include_tasks: install_docker.yml
-  when:
-    - install_docker | default(false)
-    - hostvars[inventory_hostname].get('docker', false)
+  when: hostvars[inventory_hostname].get('docker', false)
 
 # 🔹 Устанавливаем Docker Swarm, если включено в `defaults` и хост отмечен в инвентори
 - name: Install Docker Swarm

@@ -3,10 +3,6 @@
 
 skip_playbook: true
 
-install_docker: true
-
-install_docker_compose: true
-
 install_docker_compose_swarm: false
 
 install_docker_swarm: true
