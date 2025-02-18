@@ -12,7 +12,10 @@
   meta: end_play
   when: skip_playbook | default(false)
 
+# ====================================================
+# 📦 Установка Kafka
+# ====================================================
+
 - name: Install kafka
   include_tasks: install_kafka.yml
   when: "'kafka-servers' in group_names"
-

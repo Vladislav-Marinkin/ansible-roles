@@ -6,3 +6,9 @@ web-servers:
       ansible_become_user: root
       docker: true
       allow_ports: [443,80,8080,8081]
+    test-node:
+      ansible_user: ansible
+      ansible_become: yes
+      ansible_become_user: root
+      docker: true
+      allow_ports: [443,80,8080,8081]

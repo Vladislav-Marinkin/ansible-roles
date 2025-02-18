@@ -1,3 +1,7 @@
+# ====================================================
+# 🔍 Проверка, запущен ли сервис Kafka
+# ====================================================
+
 - name: Check if Kafka service is running
   systemd:
     name: kafka
@@ -6,10 +10,18 @@
   ignore_errors: true
   changed_when: false
 
+# ====================================================
+# ✅ Установка статуса Kafka в "active", если сервис запущен
+# ====================================================
+
 - name: Set Kafka status to active if the service is running
   set_fact:
     kafka_status: "active"
   when: not kafka_service_status.failed
+
+# ====================================================
+# ❌ Установка статуса Kafka в "inactive", если сервис не запущен
+# ====================================================
 
 - name: Set Kafka status to inactive if the service is not running
   set_fact:

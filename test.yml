@@ -1,5 +1,5 @@
 - name: Install kafka
-  hosts: kafka-servers
+  hosts: web-servers
   become: yes
   roles:
-    - install_kafka
+    - install_nginx

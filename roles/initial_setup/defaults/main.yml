@@ -10,6 +10,8 @@ upgrade_system: false
 
 change_hostnames: true
 
+install_python: false
+
 users: []
 
 utilities: []

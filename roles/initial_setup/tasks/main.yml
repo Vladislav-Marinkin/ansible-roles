@@ -23,6 +23,7 @@
 # ===================================================
 - name: Install Python for Ansible
   include_tasks: install_python.yml
+  when: install_python
 
 # ==========================================
 # 3️⃣ Открытие необходимых портов (Firewall)
