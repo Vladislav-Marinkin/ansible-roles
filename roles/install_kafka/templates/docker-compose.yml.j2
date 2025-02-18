@@ -1,0 +1,18 @@
+version: '3.8'
+{% set controller_servers = [] %}
+{% for host in groups['kafka-servers'] %}
+{{ controller_servers.append( host ~ ':' ~ listeners_port) }}
+{% endfor %}
+services:
+  kafka-ui:
+    image: provectuslabs/kafka-ui:{{ kafka_ui_version }}
+    container_name: kafka-ui
+    environment:
+      - KAFKA_CLUSTERS_0_NAME={{ kafka_ui_name_cluster }}
+      - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS={{ controller_servers | join(',') }}
+#      - KAFKA_CLUSTERS_0_METRICS_PORT=9999
+      - KAFKA_CLUSTERS_0_KRAFT_MODE=true
+    ports:
+      - "{{ free_port_value }}:8080"
+    volumes:
+      - /etc/hosts:/etc/hosts:ro

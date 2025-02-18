@@ -56,7 +56,7 @@
     - install_docker
 
 - name: Install kafka
-  hosts: kafka-servers,web-servers
+  hosts: kafka-servers,web-servers,docker-swarm
   become: yes
   roles:
     - install_kafka

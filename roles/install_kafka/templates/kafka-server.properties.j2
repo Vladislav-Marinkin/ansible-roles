@@ -21,7 +21,7 @@ listeners=PLAINTEXT://:{{ listeners_port }},CONTROLLER://:{{ controller_port }}
 inter.broker.listener.name=PLAINTEXT
 
 # Listener name, hostname and port the controller will advertise to admin clients, broker nodes and controller nodes.
-advertised.listeners=PLAINTEXT://localhost:{{ listeners_port }},CONTROLLER://localhost:{{ controller_port }}
+advertised.listeners=PLAINTEXT://:{{ listeners_port }},CONTROLLER://:{{ controller_port }}
 
 # This is required if running in KRaft mode.
 controller.listener.names=CONTROLLER

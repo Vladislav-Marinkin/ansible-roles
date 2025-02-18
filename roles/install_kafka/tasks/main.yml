@@ -19,3 +19,13 @@
 - name: Install kafka
   include_tasks: install_kafka.yml
   when: "'kafka-servers' in group_names"
+
+# ====================================================
+# 🐳 Установка Kafka-UI
+# ====================================================
+
+- name: Install Kafka UI
+  include_tasks: install_kafka-ui.yml
+  when: 
+    - "'web-servers' in group_names"
+    - install_kafka_ui

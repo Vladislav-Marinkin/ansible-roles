@@ -3,4 +3,4 @@
 
 skip_playbook: true
 
-install_kafka_ui: false
+install_kafka_ui: true

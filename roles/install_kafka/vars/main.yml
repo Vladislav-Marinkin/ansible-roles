@@ -23,3 +23,8 @@ kafka_config_dir: "{{ kafka_install_dir }}/config"  # Путь для конфи
 # Порты для слушателей и контроллеров
 listeners_port: 9092  # Порт для слушателей Kafka
 controller_port: 9093  # Порт для контроллеров Kafka
+
+# Настройка Kafka UI
+kafka_ui_version: "v0.7.2"
+kafka_ui_name_cluster: "kraft-cluster"
+kafka_ui_domain: "kafka-ui.local"

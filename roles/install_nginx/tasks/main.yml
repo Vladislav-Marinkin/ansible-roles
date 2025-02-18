@@ -43,3 +43,45 @@
     src: nginx.conf.j2
     dest: /etc/nginx/nginx.conf
   notify: Reload nginx
+
+# ====================================================
+# 🔍 Проверка статуса SELinux
+# ====================================================
+- name: Check if SELinux is enabled
+  command: getenforce
+  register: selinux_status
+  changed_when: false
+  ignore_errors: true
+
+# ====================================================
+# 🛡️ Настройка SELinux
+# ====================================================
+- block:
+
+  - name: Allow required ports in SELinux
+    community.general.seport:
+      ports: "40000-50000"
+      proto: tcp
+      setype: ntop_port_t
+      state: present
+
+  - name: "SELinux - allow nginx write to socket - copy type enforcement file"
+    template:
+      src: nginx.te
+      dest: /root/nginx.te
+      mode: 0644
+
+  - name: Compile the SELinux policy
+    command: checkmodule -M -m -o /root/nginx.mod /root/nginx.te
+    args:
+      creates: /root/nginx.mod
+
+  - name: Create the SELinux policy package
+    command: semodule_package -o /root/nginx.pp -m /root/nginx.mod
+    args:
+      creates: /root/nginx.pp
+
+  - name: Install the SELinux policy
+    command: semodule -i /root/nginx.pp
+
+  when: selinux_status.stdout == 'Enforcing'

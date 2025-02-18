@@ -1,0 +1,55 @@
+---
+# ====================================================
+# 🔍 Проверка доступного порта
+# ====================================================
+- name: Check for available port
+  shell: |
+    for port in $(seq 40000 50000); do
+      if ! ss -tuln | grep -q ":$port "; then
+        echo $port
+        break
+      fi
+    done
+  register: free_port
+  changed_when: false
+
+# ====================================================
+# 🧑‍💻 Установка значения свободного порта
+# ====================================================
+- name: Set free port fact
+  set_fact:
+    free_port_value: "{{ free_port.stdout | trim }}"
+
+# ====================================================
+# 🗂️ Создание директории для Kafka UI
+# ====================================================
+- name: Create dir for Kafka UI
+  file:
+    path: kafka-ui
+    state: directory
+
+# ====================================================
+# 📝 Создание файла docker-compose.yml
+# ====================================================
+- name: Create docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "kafka-ui/docker-compose.yml"
+    mode: "0644"
+
+# ====================================================
+# 🚀 Запуск Docker контейнера
+# ====================================================
+- name: Run Docker container
+  shell: |
+    cd kafka-ui && docker-compose up -d
+
+# ====================================================
+# 📝 Создание конфигурации для nginx
+# ====================================================
+- name: Create config for nginx
+  template:
+    src: kafka-ui.conf.j2
+    dest: /etc/nginx/conf.d/kafka-ui.conf
+    mode: '0644'
+  notify: Reload nginx
