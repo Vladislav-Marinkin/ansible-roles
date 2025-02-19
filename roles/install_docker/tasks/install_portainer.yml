@@ -74,8 +74,18 @@
     free_port_1: "{{ free_ports[0] }}"
     free_port_2: "{{ free_ports[1] }}"
 
+# ====================================================
+# 📝 5️⃣ Создание конфигурации для nginx
+# ====================================================
+- name: Create config for nginx
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/conf.d/portainer.conf
+    mode: '0644'
+  notify: Reload nginx
+
 # ========================================
-# 🐳 5️⃣ Развертывание контейнера Portainer
+# 🐳 6️⃣ Развертывание контейнера Portainer
 # ========================================
 
 - name: Deploy Portainer container
@@ -91,3 +101,40 @@
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
   register: portainer_container
+
+- name: Generate a random password
+  set_fact:
+    random_password: "{{ lookup('password', '/dev/null length=16 chars=ascii_letters+digits') }}"
+
+- name: Wait for Portainer API to be available
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ free_port_1 }}"
+    state: started
+    delay: 10
+    timeout: 60
+
+- name: Create user in Portainer via API with random password
+  uri:
+    url: "http://{{ inventory_hostname }}:{{ free_port_1 }}/api/users/admin/init"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+    body: |
+      {
+        "username": "admin",
+        "password": "{{ random_password }}",
+        "role": 1
+      }
+    body_format: json
+    status_code: 200
+    return_content: yes
+  register: create_user_response
+
+- name: Show user creation result
+  debug:
+    var: create_user_response
+
+- name: Show the random password
+  debug:
+    msg: "The generated password is: {{ random_password }}"

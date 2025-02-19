@@ -24,12 +24,12 @@
 # 🐳 2️⃣ Установка Docker
 # ==============================
 
-# 🔹 Устанавливаем Docker, если включено в `defaults` и хост отмечен в инвентори
+  #🔹Устанавливаем Docker, если включено в `defaults` и хост отмечен в инвентори
 - name: Install Docker
   include_tasks: install_docker.yml
   when: hostvars[inventory_hostname].get('docker', false)
 
-# 🔹 Устанавливаем Docker Swarm, если включено в `defaults` и хост отмечен в инвентори
+  #🔹Устанавливаем Docker Swarm, если включено в `defaults` и хост отмечен в инвентори
 - name: Install Docker Swarm
   include_tasks: install_docker_swarm.yml
   when: 
@@ -40,19 +40,16 @@
 # 🐋 3️⃣ Установка Portainer
 # ==============================
 
-# 🔹 Устанавливаем Portainer на веб сервер
+  #🔹Устанавливаем Portainer на веб сервер
 - name: Install Portainer
   include_tasks: install_portainer.yml
   when: hostvars[inventory_hostname].get('docker', false)
 
-# 🔹 Устанавливаем Portainer agent
-#- name: Install Portainer
-#  include_tasks: install_portainer_agent.yml
-#  when: 
-#    - install_docker_swarm | default(false)
-#    - hostvars[inventory_hostname].get('docker-swarm', false)
+  #🔹Устанавливаем Portainer agent
+- name: Install Portainer
+  include_tasks: install_portainer_agent.yml
 
-# 🔹 Подключение агентов к Portainer
+  #🔹Подключение агентов к Portainer
 #- name: Install Portainer
 #  include_tasks: connecting_portainer_agents.yml
 #  when: 
