@@ -39,7 +39,7 @@
 - name: Enable and start Docker service
   systemd:
     name: docker
-    state: started
+    state: restarted
     enabled: yes
 
 # ===============================================
@@ -54,18 +54,8 @@
     append: yes
   with_items: "{{ docker_settings.users }}"
 
-# =========================================
-# 🔄 5️⃣ Перезапуск Docker (если обновляли)
-# =========================================
-
-# 🔄 Перезапускаем Docker, чтобы применить возможные обновления
-- name: Restart Docker
-  systemd:
-    name: docker
-    state: restarted
-
 # ======================================
-# 🛠️ 6️⃣ Установка Docker Compose
+# 🛠️ 5️⃣ Установка Docker Compose
 # ======================================
 
 - name: Install docker-compose

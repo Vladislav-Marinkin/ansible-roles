@@ -1,0 +1,93 @@
+---
+# ======================================
+# 🔗 1️⃣ Подключение переменных
+# ======================================
+
+- name: Include variables
+  include_vars: vars/portainer.yml
+
+# ========================================
+# 📂 2️⃣ Создание директории для сертификатов
+# ========================================
+
+- name: Create directory for cert
+  file:
+    path: /etc/ssl/{{ portainer_domine }}
+    state: directory
+    owner: root
+    group: root
+    mode: "0644"
+
+# ========================================
+# 🔐 3️⃣ Генерация сертификатов
+# ========================================
+
+- name: Generate an OpenSSL private key
+  openssl_privatekey:
+    path: "/etc/ssl/{{ portainer_domine }}/privkey.pem"
+    size: 4096
+    type: RSA
+    backup: yes
+
+- name: Generate an OpenSSL Certificate Signing Request with Subject information
+  openssl_csr:
+    path: "/etc/ssl/{{ portainer_domine }}/server.csr"
+    privatekey_path: "/etc/ssl/{{ portainer_domine }}/privkey.pem"
+    country_name: "RU"
+    organization_name: "None"
+    email_address: "admin@mail.local"
+    common_name: "portainer.local"
+
+- name: Generate a Self Signed OpenSSL certificate
+  openssl_certificate:
+    path: "/etc/ssl/{{ portainer_domine }}/cert.pem"
+    privatekey_path: "/etc/ssl/{{ portainer_domine }}/privkey.pem"
+    csr_path: "/etc/ssl/{{ portainer_domine }}/server.csr"
+    provider: selfsigned
+
+# ========================================
+# 🖧 4️⃣ Проверка доступных портов
+# ========================================
+
+- name: Check for available ports
+  shell: |
+    free_ports_count=0
+    for port in $(seq 40000 50000); do
+      if ! ss -tuln | grep -q ":$port "; then
+        free_ports_count=$((free_ports_count + 1))
+        echo "$port"
+      fi
+      # Break once 2 free ports are found
+      if [ $free_ports_count -ge 2 ]; then
+        break
+      fi
+    done
+  register: result
+  changed_when: false
+
+- name: Split free ports into separate variables
+  set_fact:
+    free_ports: "{{ result.stdout.split('\n') }}"
+
+- name: Set variables for each free port
+  set_fact:
+    free_port_1: "{{ free_ports[0] }}"
+    free_port_2: "{{ free_ports[1] }}"
+
+# ========================================
+# 🐳 5️⃣ Развертывание контейнера Portainer
+# ========================================
+
+- name: Deploy Portainer container
+  docker_container:
+    name: portainer
+    image: portainer/portainer-ce:latest
+    state: started
+    restart_policy: unless-stopped
+    published_ports:
+      - "{{ free_port_1 }}:9000"
+      - "{{ free_port_2 }}:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+  register: portainer_container

@@ -1,7 +1,7 @@
 ---
 # defaults file for install_docker
 
-skip_playbook: true
+skip_playbook: false
 
 install_docker_compose_swarm: false
 

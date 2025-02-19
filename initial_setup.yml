@@ -62,7 +62,7 @@
     - install_kafka
 
 - name: Install gitlab
-  hosts: gitlab-servers
+  hosts: gitlab-servers, web-servers
   become: yes
   roles:
     - install_gitlab

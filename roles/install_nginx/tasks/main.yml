@@ -54,10 +54,11 @@
   ignore_errors: true
 
 # ====================================================
-# 🛡️ Настройка SELinux
+# 🛡️ Настройка SELinux, если включен
 # ====================================================
 - block:
 
+  #🔹Открываем диапазон портов для Nginx
   - name: Allow required ports in SELinux
     community.general.seport:
       ports: "40000-50000"
@@ -65,22 +66,26 @@
       setype: ntop_port_t
       state: present
 
+  #🔹Загружаем файл политики SELinux для Nginx
   - name: "SELinux - allow nginx write to socket - copy type enforcement file"
     template:
       src: nginx.te
       dest: /root/nginx.te
       mode: 0644
 
+  #🔹Компиляция политики в модуль
   - name: Compile the SELinux policy
     command: checkmodule -M -m -o /root/nginx.mod /root/nginx.te
     args:
       creates: /root/nginx.mod
 
+  #🔹Создание пакета политики для SELinux
   - name: Create the SELinux policy package
     command: semodule_package -o /root/nginx.pp -m /root/nginx.mod
     args:
       creates: /root/nginx.pp
 
+  #🔹Устанавливаем пакет политики SELinux для Nginx
   - name: Install the SELinux policy
     command: semodule -i /root/nginx.pp
 

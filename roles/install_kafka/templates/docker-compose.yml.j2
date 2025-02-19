@@ -7,6 +7,7 @@ services:
   kafka-ui:
     image: provectuslabs/kafka-ui:{{ kafka_ui_version }}
     container_name: kafka-ui
+    restart: unless-stopped
     environment:
       - KAFKA_CLUSTERS_0_NAME={{ kafka_ui_name_cluster }}
       - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS={{ controller_servers | join(',') }}

@@ -5,4 +5,4 @@ web-servers:
       ansible_become: yes
       ansible_become_user: root
       docker: true
-      allow_ports: [443,80,8080,8081,9092,9999]
+      allow_ports: [443,80,8080,8081,9092,9999,9001]

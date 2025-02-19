@@ -6,7 +6,7 @@ docker-swarm:
       ansible_become_user: root
       docker-swarm: true
       master: true
-      allow_ports: [2377]
+      allow_ports: [2377,9001]
     swarm-node-worker-1:
       ansible_user: ansible
       ansible_become: yes

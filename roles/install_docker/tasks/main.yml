@@ -21,7 +21,7 @@
   include_vars: vars/docker.yml
 
 # ==============================
-# 2️⃣ Установка Docker
+# 🐳 2️⃣ Установка Docker
 # ==============================
 
 # 🔹 Устанавливаем Docker, если включено в `defaults` и хост отмечен в инвентори
@@ -35,3 +35,26 @@
   when: 
     - install_docker_swarm | default(false)
     - hostvars[inventory_hostname].get('docker-swarm', false)
+
+# ==============================
+# 🐋 3️⃣ Установка Portainer
+# ==============================
+
+# 🔹 Устанавливаем Portainer на веб сервер
+- name: Install Portainer
+  include_tasks: install_portainer.yml
+  when: hostvars[inventory_hostname].get('docker', false)
+
+# 🔹 Устанавливаем Portainer agent
+#- name: Install Portainer
+#  include_tasks: install_portainer_agent.yml
+#  when: 
+#    - install_docker_swarm | default(false)
+#    - hostvars[inventory_hostname].get('docker-swarm', false)
+
+# 🔹 Подключение агентов к Portainer
+#- name: Install Portainer
+#  include_tasks: connecting_portainer_agents.yml
+#  when: 
+#    - hostvars[inventory_hostname].get('docker', false)
+#    - hostvars[inventory_hostname].get('docker-swarm', false)
